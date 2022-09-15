@@ -58,7 +58,7 @@ jobs:
 
       - name: Build and push Docker image
         id: build-and-push
-        run: sh hack/make-docker-images.sh
+        run: cd hack && sh make-docker-images.sh
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
