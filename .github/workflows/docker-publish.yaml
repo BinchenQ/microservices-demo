@@ -37,7 +37,7 @@ jobs:
       run: docker version && env 
 
     - name: Checkout repository
-        uses: actions/checkout@v2
+      uses: actions/checkout@v2
 
       # Workaround: https://github.com/docker/build-push-action/issues/461
       # - name: Setup Docker buildx
