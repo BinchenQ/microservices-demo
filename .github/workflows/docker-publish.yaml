@@ -56,7 +56,7 @@ jobs:
       - name: Print the input tag to STDOUT
         run: echo  The tags are ${{ inputs.tags }} 
 
-  build with pod runner:
+  build:
     # runs-on: ubuntu-latest
     # use runner-pod with labels
     runs-on: [self-hosted, dockerd]
