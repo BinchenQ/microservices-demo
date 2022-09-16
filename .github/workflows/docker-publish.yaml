@@ -9,28 +9,6 @@ on:
   # schedule:
   #  - cron: '31 7 * * *'
   workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'warning' 
-        type: choice
-        options:
-        - info
-        - warning
-        - debug 
-      print_tags:
-        description: 'True to print to STDOUT'
-        required: true 
-        type: boolean 
-      tags:
-        description: 'Test scenario tags'
-        required: true 
-        type: string
-      environment:
-        description: 'Environment to run tests against'
-        type: environment
-        required: true   
   push:
     branches: 
       # - main
@@ -49,26 +27,16 @@ env:
 
 
 jobs:
-  print-tag:
-    runs-on: ubuntu-latest
-    if:  ${{ inputs.print_tags }} 
-    steps:
-      - name: Print the input tag to STDOUT
-        run: echo  The tags are ${{ inputs.tags }} 
 
   build:
-    # runs-on: ubuntu-latest
     # use runner-pod with labels
     runs-on: [self-hosted, dockerd]
-    permissions:
-      contents: read
-      packages: write
-      # This is used to complete the identity challenge
-      # with sigstore/fulcio when running outside of PRs.
-      id-token: write
 
     steps:
-      - name: Checkout repository
+    - name: Check docker
+      run: docker version && env 
+
+    - name: Checkout repository
         uses: actions/checkout@v2
 
       # Workaround: https://github.com/docker/build-push-action/issues/461
