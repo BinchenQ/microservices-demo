@@ -34,7 +34,7 @@ for dir in ${code_dirs};do
     builddir="${dir}"
     if [ $svcname == "cartservice" ] 
     then
-        builddir="${dir}/src/cartservice"
+        builddir="${dir}/src/cartservice/src"
     fi
     image="${REPO_PREFIX}:$svcname-$TAG"
     (
