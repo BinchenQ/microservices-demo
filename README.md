@@ -1,5 +1,4 @@
 
-
 ## Architecture
 
 **Online Boutique** is composed of 11 microservices written in different
