@@ -23,8 +23,8 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 log() { echo "$1" >&2; }
 
-TAG="${TAG:?TAG env variable must be specified}"
-REPO_PREFIX="${REPO_PREFIX:?REPO_PREFIX env variable must be specified}"
+TAG="${1:?TAG env variable must be specified}"
+REPO_PREFIX="${2:?REPO_PREFIX env variable must be specified}"
 
 code_dirs=`find "${SCRIPTDIR}/../src" -mindepth 1 -maxdepth 1 -type d`
 for dir in ${code_dirs};do

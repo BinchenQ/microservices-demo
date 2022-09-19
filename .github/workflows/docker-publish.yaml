@@ -50,4 +50,4 @@ jobs:
 
     - name: Build and push Docker image
       id: build-and-push
-      run: cd hack && sh make-docker-images.sh
+      run: make build_service adservice
