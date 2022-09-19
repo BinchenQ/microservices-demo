@@ -50,4 +50,4 @@ jobs:
 
     - name: Build and push Docker image
       id: build-and-push
-      run: make build_service adservice
+      run: make build_service app=frontend
