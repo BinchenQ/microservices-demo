@@ -7,7 +7,7 @@ def helmLint(String chartDir) {
 
 def helmRepo(Map args) {
   println "添加 repo"
-  sh "helm repo add --username ${args.username} --password ${args.password} dtc http://docker.ke.com/chenbin082"
+  sh "helm repo add --username ${args.username} --password ${args.password} cariad-cn http://XXX"
 
   println "更新 repo"
   sh "helm repo update"

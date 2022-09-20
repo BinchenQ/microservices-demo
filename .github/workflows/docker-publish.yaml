@@ -30,7 +30,7 @@ jobs:
 
   build:
     # use runner-pod with labels
-    runs-on: [self-hosted, dockerd]
+    runs-on: dockerd
 
     steps:
     - name: Check docker
