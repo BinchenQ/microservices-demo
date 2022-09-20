@@ -1,19 +1,17 @@
-name: Docker
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+name: docker publish
 on: 
   - workflow_dispatch
-  - push:
-      branches: 
-        # - main
-        # - release/*
-        - dev
-      tags: [ 'v*.*.*' ]
-  - pull_request:
-      branches: [ main ]
+  - push
+# on: 
+#   - workflow_dispatch
+#   - push:
+#       branches: 
+#         # - main
+#         # - release/*
+#         - dev
+#       tags: [ 'v*.*.*' ]
+#   - pull_request:
+#       branches: [ main ]
 
 
 env:
