@@ -1,7 +1,9 @@
 name: docker publish
 on: 
   - workflow_dispatch
-  - push
+  - push:
+      branches:
+        - dev
 # on: 
 #   - workflow_dispatch
 #   - push:
