@@ -25,7 +25,8 @@ jobs:
 
   build:
     # use runner-pod with labels
-    runs-on: dockerd
+    # runs-on: dockerd
+    runs-on: local-runner
 
     steps:
     - name: Check docker
