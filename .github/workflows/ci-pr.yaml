@@ -2,6 +2,11 @@ name: "Continuous Integration - Pull Request"
 on:
   pull_request:
     branches: [ main ]
+
+env:
+  GOPROXY: https://goproxy.cn,direct
+  DOCKER_BUILDKIT: 0
+
 jobs:
   code-tests:
     runs-on: [self-hosted, ubuntu]
@@ -10,9 +15,9 @@ jobs:
       with:
         ref: ${{github.event.pull_request.head.ref}}
         repository: ${{github.event.pull_request.head.repo.full_name}}
-    - uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '6.0'
+    # - uses: actions/setup-dotnet@v2
+    #   with:
+    #     dotnet-version: '6.0'
     - uses: actions/setup-go@v3
       with:
         go-version: '1.18'
