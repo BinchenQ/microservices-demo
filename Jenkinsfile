@@ -39,7 +39,7 @@ properties([
 ])
 
 podTemplate(label: label, containers: [
-  containerTemplate(name: 'docker', image: 'docker:latest', command: 'cat', ttyEnabled: true),
+  containerTemplate(name: 'docker', image: 'binchenq/docker:19.03-s2i', command: 'cat', ttyEnabled: true),
 //   containerTemplate(name: 'helm', image: 'helm', command: 'cat', ttyEnabled: true)
 ], volumes: [
 //   hostPathVolume(mountPath: '/home/jenkins/.kube', hostPath: '/root/.kube'),
