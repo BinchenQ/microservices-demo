@@ -34,4 +34,4 @@ jobs:
         password: ${{ secrets.HUB_PWD }}
 
     - name: release
-      run: make rls
+      run: make init rls

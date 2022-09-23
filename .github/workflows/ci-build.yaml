@@ -40,4 +40,4 @@ jobs:
 
     - name: build service
       id: build-and-push
-      run: make build_service SERVICE=frontend
+      run: make init build_service SERVICE=frontend
