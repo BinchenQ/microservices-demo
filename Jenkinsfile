@@ -32,6 +32,11 @@ def helmDeploy(Map args) {
     }
 }
 
+properties([
+    parameters([
+        string(defaultValue: 'frontend', description: '要构建的子模块，默认: all', name: 'subModule'),
+    ])
+])
 
 podTemplate(label: label, containers: [
   containerTemplate(name: 'docker', image: 'docker:latest', command: 'cat', ttyEnabled: true),
@@ -47,7 +52,7 @@ podTemplate(label: label, containers: [
     def imageTag = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
     def dockerRegistryUrl = "docker.io"
     def imageEndpoint = "binchenq/microservices-demo"
-    def image = "${dockerRegistryUrl}/${imageEndpoint}"
+    // def image = "${dockerRegistryUrl}/${imageEndpoint}"
 
     stage('单元测试') {
       echo "1.测试阶段"
@@ -62,9 +67,7 @@ podTemplate(label: label, containers: [
             echo "3. 构建 Docker 镜像阶段"
             sh """
               docker login ${dockerRegistryUrl} -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
-              cd src/adservice
-              docker build -t ${image}:${imageTag} .
-              docker push ${image}:${imageTag}
+              make build_service TAG=${imageTag} REPO_PREFIX=${imageEndpoint} app=${params.subModule}
               """
           }
       }
