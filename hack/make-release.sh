@@ -13,11 +13,11 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 log() { echo "$1" >&2; }
 fail() { log "$1"; exit 1; }
 
-TAG="${TAG:?TAG env variable must be specified}"
+VERSION="${1:-${TAG:?TAG env variable must be specified}}"
 REPO_PREFIX="${REPO_PREFIX:?REPO_PREFIX env variable must be specified}"
 
-if [[ "$TAG" != v* ]]; then
-    fail "\$TAG must start with 'v', e.g. v0.1.0 (got: $TAG)"
+if [[ "$VERSION" != v* ]]; then
+    fail "\$VERSION must start with 'v', e.g. v0.1.0 (got: $VERSION)"
 fi
 
 # build and push images
@@ -27,12 +27,12 @@ fi
 "${SCRIPTDIR}"/make-release-artifacts.sh
 
 # create git release / push to new branch
-git checkout -b "release/${TAG}"
+git checkout -b "release/${VERSION}"
 git add "${SCRIPTDIR}/../release/"
-git commit --allow-empty -m "Release $TAG"
-log "Pushing k8s manifests to release/${TAG}..."
-git tag "$TAG"
-git push --set-upstream origin "release/${TAG}"
+git commit --allow-empty -m "Release $VERSION"
+log "Pushing k8s manifests to release/${VERSION}..."
+git tag "$VERSION"
+git push --set-upstream origin "release/${VERSION}"
 git push --tags
 
-log "Successfully tagged release $TAG."
+log "Successfully tagged release $VERSION."

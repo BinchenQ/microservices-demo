@@ -1,0 +1,43 @@
+name: docker publish
+
+on: 
+  # - workflow_dispatch
+
+  push:
+    branches: 
+      - dev
+    tags: [ 'v*.*.*' ]
+
+
+
+env:
+  # Use docker.io for Docker Hub if empty, github.repository as <account>/<repo>
+  REGISTRY: docker.io
+  DOCKER_BUILDKIT: 0
+  
+
+jobs:
+
+  build:
+    # use runner-pod with labels
+    runs-on: dockerd
+    # runs-on: local-runner
+
+    steps:
+    - name: Check docker
+      run: docker version && env 
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+      # Login against a Docker registry except on PR
+      # https://github.com/docker/login-action
+    - name: Log into registry ${{ env.REGISTRY }}
+      uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ secrets.HUB_USER }}
+        password: ${{ secrets.HUB_PWD }}
+
+    - name: build service
+      id: build-and-push
+      run: make build_service SERVICE=frontend

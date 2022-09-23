@@ -1,22 +1,7 @@
-# Copyright 2020 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 name: "Continuous Integration - Pull Request"
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    branches: [ main ]
 jobs:
   code-tests:
     runs-on: [self-hosted, ubuntu]
@@ -40,6 +25,16 @@ jobs:
           go test
           popd
         done
+    - name: Log into registry ${{ env.REGISTRY }}
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ secrets.HUB_USER }}
+        password: ${{ secrets.HUB_PWD }}
+    - name: Generate deploy manifests
+      run: make rls
+
   deployment-tests:
     runs-on: [self-hosted, local-runner]
     needs: code-tests

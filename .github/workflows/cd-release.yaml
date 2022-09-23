@@ -1,23 +1,17 @@
 name: docker publish
 
 on: 
-  # - workflow_dispatch
 
   push:
     branches: 
-      # - main
-      # - release/*
-      - dev
+      - main
+      - release/*
     tags: [ 'v*.*.*' ]
-  pull_request:
-    branches: [ main ]
 
 
 env:
   # Use docker.io for Docker Hub if empty, github.repository as <account>/<repo>
   REGISTRY: docker.io
-  REPO_PREFIX: docker.io/binchenq/microservices-demo
-  TAG: v1.0.0
   DOCKER_BUILDKIT: 0
   
 
@@ -26,15 +20,9 @@ jobs:
 
   build:
     # use runner-pod with labels
-    runs-on: dockerd
-    # runs-on: local-runner
+    runs-on: local-runner
 
     steps:
-    - name: Check docker
-      run: docker version && env 
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
     - name: Log into registry ${{ env.REGISTRY }}
@@ -45,6 +33,5 @@ jobs:
         username: ${{ secrets.HUB_USER }}
         password: ${{ secrets.HUB_PWD }}
 
-    - name: Build and push Docker image
-      id: build-and-push
-      run: make build_service app=emailservice
+    - name: release
+      run: make rls
