@@ -6,7 +6,7 @@ build_all:
 	TAG=$(TAG) REPO_PREFIX=$(REPO_PREFIX) sh hack/make-docker-images.sh
 
 build_service:
-	cat hack/make-docker-images.sh && sleep 5000
+	cat hack/make-docker-images.sh
 	TAG=$(TAG) REPO_PREFIX=$(REPO_PREFIX) sh hack/make-docker-images.sh $(SERVICE)
 
 rls:
