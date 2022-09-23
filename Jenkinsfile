@@ -32,12 +32,6 @@ def helmDeploy(Map args) {
     }
 }
 
-properties([
-    parameters([
-        string(defaultValue: 'frontend', description: '要构建的子模块，默认: all', name: 'subModule'),
-    ])
-])
-
 podTemplate(label: label, containers: [
   containerTemplate(name: 'docker', image: 'binchenq/docker:19.03-s2i', command: 'cat', ttyEnabled: true),
 //   containerTemplate(name: 'helm', image: 'helm', command: 'cat', ttyEnabled: true)
@@ -67,7 +61,7 @@ podTemplate(label: label, containers: [
             echo "3. 构建 Docker 镜像阶段"
             sh """
               docker login ${dockerRegistryUrl} -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
-              make build_service TAG=${imageTag} REPO_PREFIX=${imageEndpoint} app=${params.subModule}
+              make build_service TAG=${imageTag} REPO_PREFIX=${imageEndpoint} SERVICE=frontend
               """
           }
       }
