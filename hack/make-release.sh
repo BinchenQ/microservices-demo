@@ -6,7 +6,7 @@
 # - 3. creating a new git tag
 # - 4. pushing the tag/commit to main.
 
-set -euo pipefail
+set -e
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 [[ -n "${DEBUG:-}" ]] && set -x
 

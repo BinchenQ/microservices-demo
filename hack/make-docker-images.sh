@@ -1,11 +1,12 @@
-#!/bin/sh
+#!/bin/bash
+
 set -e
 log() { echo "$1" >&2; }
 
 SCRIPTDIR=$(cd `dirname "${BASH_SOURCE[0]}"`;pwd)
 
 # build image with subdir(same with submodule name)
-function service_build(){
+service_build() {
     TAG="${TAG:?TAG env variable must be specified}"
     REPO_PREFIX="${REPO_PREFIX:?REPO_PREFIX env variable must be specified}"
     service=${1:?service must be specified}
