@@ -1,0 +1,45 @@
+name: docker publish
+
+on: 
+
+  push:
+    branches: 
+      - main
+      - release/*
+    tags: [ 'v*.*.*' ]
+
+
+env:
+  # Use docker.io for Docker Hub if empty, github.repository as <account>/<repo>
+  REGISTRY: docker.io
+  DOCKER_BUILDKIT: 0
+  
+
+
+jobs:
+
+  build:
+    # use runner-pod with labels
+    runs-on: local-runner
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: list files
+      run: ls -l && pwd
+      # Login against a Docker registry except on PR
+      # https://github.com/docker/login-action
+    - name: Log into registry ${{ env.REGISTRY }}
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ secrets.HUB_USER }}
+        password: ${{ secrets.HUB_PWD }}
+
+    - name: release
+      run: |
+        make init
+        make rls

@@ -1,33 +1,23 @@
-# Copyright 2020 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 name: "Continuous Integration - Pull Request"
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    branches: [ main ]
+
+env:
+  GOPROXY: https://goproxy.cn,direct
+  DOCKER_BUILDKIT: 0
+
 jobs:
   code-tests:
-    runs-on: [self-hosted, is-enabled]
+    runs-on: [self-hosted, ubuntu]
     steps:
     - uses: actions/checkout@v3
       with:
         ref: ${{github.event.pull_request.head.ref}}
         repository: ${{github.event.pull_request.head.repo.full_name}}
-    - uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '6.0'
+    # - uses: actions/setup-dotnet@v2
+    #   with:
+    #     dotnet-version: '6.0'
     - uses: actions/setup-go@v3
       with:
         go-version: '1.18'
@@ -40,12 +30,16 @@ jobs:
           go test
           popd
         done
-    - name: C# Unit Tests
-      timeout-minutes: 10
-      run: |
-        dotnet test src/cartservice/
+    - name: Log into registry ${{ env.REGISTRY }}
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ secrets.HUB_USER }}
+        password: ${{ secrets.HUB_PWD }}
+
   deployment-tests:
-    runs-on: [self-hosted, is-enabled]
+    runs-on: [self-hosted, local-runner]
     needs: code-tests
     strategy:
       matrix:
@@ -56,28 +50,23 @@ jobs:
       with:
         ref: ${{github.event.pull_request.head.ref}}
         repository: ${{github.event.pull_request.head.repo.full_name}}
-    - name: Build + Deploy PR images to GKE
+    - name: Generate deploy manifests
+      run: make rls
+    - name: Build + Deploy PR images to k8s
       timeout-minutes: 20
       run: |
         NAMESPACE="pr${PR_NUMBER}"
         echo "::set-env name=NAMESPACE::$NAMESPACE"
-
-        gcloud container clusters get-credentials $PR_CLUSTER --zone $ZONE --project $PROJECT_ID
         cat <<EOF | kubectl apply -f -
         apiVersion: v1
         kind: Namespace
         metadata:
           name: $NAMESPACE
         EOF
-        echo Deploying application
-        skaffold config set --global local-cluster false
-        skaffold run --default-repo=gcr.io/$PROJECT_ID/refs/pull/$PR_NUMBER --tag=$PR_NUMBER --namespace=$NAMESPACE
+        kubectl create -f release/*.yaml
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         PR_NUMBER: ${{ github.event.pull_request.number }}
-        PROJECT_ID: "online-boutique-ci"
-        PR_CLUSTER: "online-boutique-prs"
-        ZONE: "us-central1-c"
     - name: Wait For Pods
       timeout-minutes: 20
       run: |
