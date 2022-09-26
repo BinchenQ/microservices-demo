@@ -63,7 +63,7 @@ jobs:
         metadata:
           name: $NAMESPACE
         EOF
-        kubectl create -f release/*.yaml -n $NAMESPACE
+        kubectl apply -f release/*.yaml -n $NAMESPACE
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         PR_NUMBER: ${{ github.event.pull_request.number }}
@@ -90,7 +90,8 @@ jobs:
         set -x
         NAMESPACE="pr${PR_NUMBER}"
         get_externalIP() {
-          kubectl get service frontend-external --namespace $NAMESPACE -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+          # kubectl get service frontend-external --namespace $NAMESPACE -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+          kubectl get service frontend-external --namespace $NAMESPACE -o jsonpath='{.spec.clusterIP}'
         }
         until [[ -n "$(get_externalIP)" ]]; do
           echo "Querying for external IP for frontend-external on namespace: $NAMESPACE{}"
@@ -131,3 +132,5 @@ jobs:
             -H "Authorization: token $GITHUB_TOKEN" \
             --data '{ "body": "🚲 PR staged at '"http://${EXTERNAL_IP}"'"}'
           sleep 60
+    - name: Clean
+      run: kubectl delete ns pr${PR_NUMBER}
