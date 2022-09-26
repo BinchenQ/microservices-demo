@@ -26,12 +26,12 @@ fi
 "${SCRIPTDIR}"/make-release-artifacts.sh
 
 # create git release / push to new branch
-git checkout -b "release/${VERSION}"
-git add "${SCRIPTDIR}/../release/"
-git commit --allow-empty -m "Release $VERSION"
-log "Pushing k8s manifests to release/${VERSION}..."
-git tag "$VERSION"
-git push --set-upstream origin "release/${VERSION}"
-git push --tags
+# git checkout -b "release/${VERSION}"
+# git add "${SCRIPTDIR}/../release/"
+# git commit --allow-empty -m "Release $VERSION"
+# log "Pushing k8s manifests to release/${VERSION}..."
+# git tag "$VERSION"
+# git push --set-upstream origin "release/${VERSION}"
+# git push --tags
 
 log "Successfully tagged release $VERSION."

@@ -37,8 +37,6 @@ jobs:
         registry: ${{ env.REGISTRY }}
         username: ${{ secrets.HUB_USER }}
         password: ${{ secrets.HUB_PWD }}
-    - name: Generate deploy manifests
-      run: make init rls
 
   deployment-tests:
     runs-on: [self-hosted, local-runner]
@@ -52,6 +50,8 @@ jobs:
       with:
         ref: ${{github.event.pull_request.head.ref}}
         repository: ${{github.event.pull_request.head.repo.full_name}}
+    - name: Generate deploy manifests
+      run: make rls
     - name: Build + Deploy PR images to k8s
       timeout-minutes: 20
       run: |
