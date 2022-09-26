@@ -15,7 +15,7 @@ fail() { log "$1"; exit 1; }
 VERSION="${1:-${TAG:?TAG env variable must be specified}}"
 REPO_PREFIX="${REPO_PREFIX:?REPO_PREFIX env variable must be specified}"
 
-if [ "$VERSION" != v* ]; then
+if [[ "$VERSION" != v* ]]; then
     fail "\$VERSION must start with 'v', e.g. v0.1.0 (got: $VERSION)"
 fi
 
