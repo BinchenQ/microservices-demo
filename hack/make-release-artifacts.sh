@@ -41,6 +41,7 @@ mk_kubernetes_manifests() {
         echo '---' >> $1
         echo $yaml_temp
     done
+    cat ${SCRIPTDIR}/../kubernetes-manifests/redis/redis.yaml >> $1
 
     echo "# [END release_kubernetes_manifests_microservices_demo]" >> $1
 }
