@@ -23,6 +23,12 @@ jobs:
     runs-on: local-runner
 
     steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: list files
+      run: ls -l && pwd
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
     - name: Log into registry ${{ env.REGISTRY }}
@@ -34,4 +40,6 @@ jobs:
         password: ${{ secrets.HUB_PWD }}
 
     - name: release
-      run: make init rls
+      run: |
+        make init
+        make rls
