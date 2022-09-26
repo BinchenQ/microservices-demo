@@ -63,7 +63,7 @@ jobs:
         metadata:
           name: $NAMESPACE
         EOF
-        kubectl create -f release/*.yaml
+        kubectl create -f release/*.yaml -n $NAMESPACE
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         PR_NUMBER: ${{ github.event.pull_request.number }}
