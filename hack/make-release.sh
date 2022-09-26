@@ -20,7 +20,7 @@ if [[ "$VERSION" != v* ]]; then
 fi
 
 # build and push images
-"${SCRIPTDIR}"/make-docker-images.sh
+# "${SCRIPTDIR}"/make-docker-images.sh
 
 # update yaml
 "${SCRIPTDIR}"/make-release-artifacts.sh
