@@ -33,7 +33,7 @@ def helmDeploy(Map args) {
 }
 
 podTemplate(label: label, containers: [
-  containerTemplate(name: 'docker', image: 'binchenq/docker:19.03-s2i', command: 'cat', ttyEnabled: true),
+  containerTemplate(name: 'docker', image: 'summerwind/actions-runner:latest', args: 'cat', command: '/bin/sh -c', ttyEnabled: true),
 //   containerTemplate(name: 'helm', image: 'helm', command: 'cat', ttyEnabled: true)
 ], volumes: [
 //   hostPathVolume(mountPath: '/home/jenkins/.kube', hostPath: '/root/.kube'),
