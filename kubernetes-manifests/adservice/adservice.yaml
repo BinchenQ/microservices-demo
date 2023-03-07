@@ -41,7 +41,7 @@ spec:
               - all
           privileged: false
           readOnlyRootFilesystem: true
-        image: adservice
+        image: binchenq/microservices-demo:adservice-668d368
         ports:
         - containerPort: 9555
         env:
