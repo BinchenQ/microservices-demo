@@ -33,7 +33,7 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
       containers:
-      - name: cartservice
+      - name: binchenq/microservices-demo:cartservice-v1.0.0
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
