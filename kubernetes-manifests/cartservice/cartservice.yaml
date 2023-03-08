@@ -33,7 +33,7 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
       containers:
-      - name: binchenq/microservices-demo:cartservice-v1.0.0
+      - name: app
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -41,7 +41,7 @@ spec:
               - all
           privileged: false
           readOnlyRootFilesystem: true
-        image: cartservice
+        image: binchenq/microservices-demo:cartservice-v1.0.0
         ports:
         - containerPort: 7070
         env:
@@ -49,10 +49,10 @@ spec:
           value: "redis-cart:6379"
         resources:
           requests:
-            cpu: 100m
+            cpu: 10m
             memory: 64Mi
           limits:
-            cpu: 300m
+            cpu: 100m
             memory: 128Mi
         readinessProbe:
           initialDelaySeconds: 15
